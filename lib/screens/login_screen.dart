@@ -20,13 +20,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController(text: 'elena.vance@nova.design');
-  final _passwordController = TextEditingController(text: '••••••••••••');
-  LoginUiState _state = const LoginUiState(
-    email: 'elena.vance@nova.design',
-    password: 'password123',
-    rememberMe: true,
-  );
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  LoginUiState _state = const LoginUiState();
 
   final RegExp _emailRegex =
       RegExp(r'^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
@@ -181,10 +177,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           leadingIcon: Icons.mail_outline_rounded,
                           keyboardType: TextInputType.emailAddress,
                           errorMessage: _state.emailError,
-                          onChanged: (_) {
-                            if (_state.emailError != null) {
-                              setState(() => _state = _state.copyWith(emailError: null));
-                            }
+                          onChanged: (val) {
+                            setState(() {
+                              _state = _state.copyWith(
+                                email: val,
+                                emailError: null,
+                              );
+                            });
                           },
                         ),
 
@@ -204,10 +203,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               );
                             });
                           },
-                          onChanged: (_) {
-                            if (_state.passwordError != null) {
-                              setState(() => _state = _state.copyWith(passwordError: null));
-                            }
+                          onChanged: (val) {
+                            setState(() {
+                              _state = _state.copyWith(
+                                password: val,
+                                passwordError: null,
+                              );
+                            });
                           },
                         ),
 

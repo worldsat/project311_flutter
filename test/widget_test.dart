@@ -10,6 +10,10 @@ void main() {
     await tester.pumpWidget(const NovaApp());
     expect(find.text('Welcome Back'), findsOneWidget);
     expect(find.text('Sign In'), findsOneWidget);
+    expect(find.text('Remember me'), findsOneWidget);
+    // Initial state is empty, matching Android LoginUiState
+    expect(find.text('elena.vance@nova.design'), findsNothing);
+    expect(find.text('password123'), findsNothing);
   });
 
   testWidgets('SignUpScreen UI elements test', (WidgetTester tester) async {
@@ -61,6 +65,9 @@ void main() {
     expect(find.text('Material You Theme'), findsOneWidget);
     expect(find.text('Push Notifications'), findsOneWidget);
     expect(find.text('Data & Cloud Storage'), findsOneWidget);
+    expect(find.text('Visa ending in 4289'), findsOneWidget);
+    expect(find.text('18.4 GB of 50 GB used'), findsOneWidget);
+    expect(find.text('37%'), findsOneWidget);
 
     // Logout
     expect(find.text('Log Out'), findsOneWidget);

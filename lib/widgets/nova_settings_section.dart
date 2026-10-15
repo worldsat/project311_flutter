@@ -61,7 +61,7 @@ class NovaAccountSecuritySection extends StatelessWidget {
               _SettingsNavRow(
                 icon: Icons.credit_card_outlined,
                 title: 'Payment Methods',
-                subtitle: 'Visa ending in ',
+                subtitle: 'Visa ending in ${profile.paymentCardLastFour ?? "4289"}',
                 onClick: onPaymentMethodsClick,
               ),
             ],
@@ -338,7 +338,7 @@ class _SettingsStorageRow extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        ' GB of  GB used',
+                        '${profile.storageUsedGb} GB of ${profile.storageCapacityGb.toInt()} GB used',
                         style: const TextStyle(
                           fontSize: 12,
                           color: NovaColors.onSurfaceVariant,
@@ -348,7 +348,7 @@ class _SettingsStorageRow extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '%',
+                  '${profile.storagePercentage}%',
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
