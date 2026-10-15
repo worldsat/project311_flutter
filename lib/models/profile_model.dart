@@ -43,11 +43,15 @@ class DemoProfile {
     required this.logoAsset,
   });
 
-  int get storagePercentage =>
-      ((storageUsedGb / storageCapacityGb) * 100).round();
+  int get storagePercentage {
+    if (storageCapacityGb <= 0) return 0;
+    return ((storageUsedGb / storageCapacityGb) * 100).round().clamp(0, 100);
+  }
 
-  double get storageProgressFraction =>
-      (storageUsedGb / storageCapacityGb).clamp(0.0, 1.0);
+  double get storageProgressFraction {
+    if (storageCapacityGb <= 0) return 0.0;
+    return (storageUsedGb / storageCapacityGb).clamp(0.0, 1.0);
+  }
 }
 
 class MockProfileData {

@@ -1,12 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_app/main.dart';
+import 'package:flutter_app/models/profile_model.dart';
 import 'package:flutter_app/screens/signup_screen.dart';
 import 'package:flutter_app/screens/profile_screen.dart';
+import 'package:flutter_app/widgets/nova_settings_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/theme/nova_theme.dart';
 
 void main() {
-  testWidgets('NovaApp Login Screen smoke test', (WidgetTester tester) async {
+  testWidgets('NovaApp Login Screen smoke and initial state test', (WidgetTester tester) async {
     await tester.pumpWidget(const NovaApp());
     expect(find.text('Welcome Back'), findsOneWidget);
     expect(find.text('Sign In'), findsOneWidget);
@@ -14,6 +16,20 @@ void main() {
     // Initial state is empty, matching Android LoginUiState
     expect(find.text('elena.vance@nova.design'), findsNothing);
     expect(find.text('password123'), findsNothing);
+  });
+
+  testWidgets('LoginScreen empty form validation test', (WidgetTester tester) async {
+    await tester.pumpWidget(const NovaApp());
+    expect(find.text('Email is required'), findsNothing);
+    expect(find.text('Password is required'), findsNothing);
+
+    // Tap Sign In button with empty form
+    await tester.tap(find.text('Sign In'));
+    await tester.pump();
+
+    // Form validation errors should be displayed
+    expect(find.text('Email is required'), findsOneWidget);
+    expect(find.text('Password is required'), findsOneWidget);
   });
 
   testWidgets('SignUpScreen UI elements test', (WidgetTester tester) async {
@@ -71,5 +87,55 @@ void main() {
 
     // Logout
     expect(find.text('Log Out'), findsOneWidget);
+  });
+
+
+  testWidgets('NovaSettingsSection fallback values test', (WidgetTester tester) async {
+    const fallbackProfile = DemoProfile(
+      id: 'fallback-profile',
+      displayName: 'Test User',
+      handle: '@test',
+      role: 'Tester',
+      projectsCount: 0,
+      followersLabel: '0',
+      rating: 5.0,
+      paymentCardLastFour: null,
+      storageUsedGb: 0.0,
+      storageCapacityGb: 0.0,
+      avatarAsset: 'assets/images/avatar_elena.png',
+      logoAsset: 'assets/images/nova_brand_logo.png',
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: NovaTheme.lightTheme,
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                NovaAccountSecuritySection(
+                  profile: fallbackProfile,
+                  securityEnabled: true,
+                  onSecurityToggle: (_) {},
+                  onPersonalInfoClick: () {},
+                  onPaymentMethodsClick: () {},
+                ),
+                NovaAppPreferencesSection(
+                  profile: fallbackProfile,
+                  materialYouEnabled: true,
+                  onMaterialYouToggle: (_) {},
+                  onNotificationsClick: () {},
+                  onStorageClick: () {},
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Visa ending in 4289'), findsOneWidget);
+    expect(find.text('0.0 GB of 0 GB used'), findsOneWidget);
+    expect(find.text('0%'), findsOneWidget);
   });
 }
